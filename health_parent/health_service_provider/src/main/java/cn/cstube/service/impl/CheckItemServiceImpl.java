@@ -28,7 +28,22 @@ public class CheckItemServiceImpl implements CheckItemService {
     }
 
 
+    //检查项分页查询
+    public PageResult pageQuery(QueryPageBean queryPageBean) {
+        Integer currentPage = queryPageBean.getCurrentPage();
+        Integer pageSize = queryPageBean.getPageSize();
+        String queryString = queryPageBean.getQueryString();
 
+        //完成分页查询，基于mybatis框架提供的分页助手插件完成
+        PageHelper.startPage(currentPage,pageSize);
+
+        Page<CheckItem> page = checkItemDao.selectByCondition(queryString);
+        long total = page.getTotal();
+        List<CheckItem> rows = page.getResult();
+
+        return new PageResult(total,rows);
+
+    }
 
 
 }
