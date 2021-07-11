@@ -1,9 +1,13 @@
 package cn.cstube.service.impl;
 
 import cn.cstube.dao.CheckGroupDao;
+import cn.cstube.entity.PageResult;
+import cn.cstube.entity.QueryPageBean;
 import cn.cstube.pojo.CheckGroup;
 import cn.cstube.service.CheckGroupService;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,5 +39,15 @@ public class CheckGroupServiceImpl implements CheckGroupService {
                 checkGroupDao.setCheckGroupAndCheckItem(map);
             }
         }
+    }
+
+    //分页查询
+    public PageResult pageQuery(QueryPageBean queryPageBean) {
+        Integer currentPage = queryPageBean.getCurrentPage();
+        Integer pageSize = queryPageBean.getPageSize();
+        String queryString = queryPageBean.getQueryString();
+        PageHelper.startPage(currentPage,pageSize);
+        Page<CheckGroup> page = checkGroupDao.findByCondition(queryString);
+        return new PageResult(page.getTotal(),page.getResult());
     }
 }

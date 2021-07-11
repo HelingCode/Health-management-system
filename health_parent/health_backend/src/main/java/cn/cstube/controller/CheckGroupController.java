@@ -1,6 +1,8 @@
 package cn.cstube.controller;
 
 import cn.cstube.constant.MessageConstant;
+import cn.cstube.entity.PageResult;
+import cn.cstube.entity.QueryPageBean;
 import cn.cstube.entity.Result;
 import cn.cstube.pojo.CheckGroup;
 import cn.cstube.pojo.CheckItem;
@@ -35,5 +37,13 @@ public class CheckGroupController {
             return new Result(false, MessageConstant.ADD_CHECKGROUP_FAIL);
         }
         return  new Result(true, MessageConstant.ADD_CHECKGROUP_SUCCESS);
+    }
+
+    //分页查询
+    @RequestMapping("/findPage")
+    public PageResult findPage(@RequestBody QueryPageBean queryPageBean){
+
+
+        return checkGroupService.pageQuery(queryPageBean);
     }
 }

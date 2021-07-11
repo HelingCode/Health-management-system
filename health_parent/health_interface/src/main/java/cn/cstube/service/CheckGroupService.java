@@ -1,5 +1,7 @@
 package cn.cstube.service;
 
+import cn.cstube.entity.PageResult;
+import cn.cstube.entity.QueryPageBean;
 import cn.cstube.pojo.CheckGroup;
 
 /**
@@ -8,4 +10,6 @@ import cn.cstube.pojo.CheckGroup;
  */
 public interface CheckGroupService {
     public void add(CheckGroup checkGroup, Integer[] checkitemIds);
+
+    public PageResult pageQuery(QueryPageBean queryPageBean);
 }
