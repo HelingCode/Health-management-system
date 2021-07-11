@@ -6,6 +6,8 @@ import cn.cstube.entity.QueryPageBean;
 import cn.cstube.pojo.CheckItem;
 import com.github.pagehelper.Page;
 
+import java.util.List;
+
 public interface CheckItemDao {
     public void add(CheckItem checkItem);
 
@@ -18,4 +20,6 @@ public interface CheckItemDao {
     public void edit(CheckItem checkItem);
 
     public CheckItem findById(Integer id);
+
+    public List<CheckItem> findAll();
 }
