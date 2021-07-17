@@ -68,4 +68,8 @@
     <delete id="deleteAssocication" parameterType="int">
         delete from t_checkgroup_checkitem where checkgroup_id = #{id}
     </delete>
+
+    <select id="findAll" resultType="cn.cstube.pojo.CheckGroup">
+        select * from t_checkgroup
+    </select>
 </mapper>
