@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,14 +32,7 @@ public class CheckGroupServiceImpl implements CheckGroupService {
         checkGroupDao.add(checkGroup);
         //设置检查组和检查项的多对多的关联关系，操作t_checkgroup_checkitem表
         Integer checkGroupId = checkGroup.getId();
-        if(checkitemIds != null && checkitemIds.length > 0){
-            for (Integer checkitemId : checkitemIds) {
-                Map<String,Integer> map = new HashMap<>();
-                map.put("checkgroupId",checkGroupId);
-                map.put("checkitemId",checkitemId);
-                checkGroupDao.setCheckGroupAndCheckItem(map);
-            }
-        }
+        this.setCheckGroupAndCheckItem(checkGroupId,checkitemIds);
     }
 
     //分页查询
@@ -50,4 +44,40 @@ public class CheckGroupServiceImpl implements CheckGroupService {
         Page<CheckGroup> page = checkGroupDao.findByCondition(queryString);
         return new PageResult(page.getTotal(),page.getResult());
     }
+
+    //根据ID来查询检查组
+    public CheckGroup findById(Integer id) {
+        return checkGroupDao.findById(id);
+    }
+
+    //根据检查组ID查询关联的检查项ID
+    public List<Integer> findCheckItemIdsByCheckGroupId(Integer id) {
+        return checkGroupDao.findCheckItemIdsByCheckGroupId(id);
+    }
+
+
+    public void edit(CheckGroup checkGroup, Integer[] checkitemIds) {
+        checkGroupDao.edit(checkGroup);
+
+        //清理当前检查组关联的检查项，操作中间关系表t_checkgroup_checkitem表
+        checkGroupDao.deleteAssocication(checkGroup.getId());
+        //重新建立当前检查组与检查项的关联关系
+        Integer checkGroupId = checkGroup.getId();
+        this.setCheckGroupAndCheckItem(checkGroupId,checkitemIds);
+
+    }
+
+
+    //建立检查组与检查项多对多的关系
+    public void setCheckGroupAndCheckItem(Integer checkGroupId, Integer[] checkitemIds){
+        if(checkitemIds != null && checkitemIds.length > 0){
+            for (Integer checkitemId : checkitemIds) {
+                Map<String,Integer> map = new HashMap<>();
+                map.put("checkgroupId",checkGroupId);
+                map.put("checkitemId",checkitemId);
+                checkGroupDao.setCheckGroupAndCheckItem(map);
+            }
+        }
+    }
+
 }
